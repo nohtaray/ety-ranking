@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/nohtaray/ety-ranking/pkg"
 	"log"
 	"net/http"
 	"net/http/cookiejar"
@@ -81,6 +82,9 @@ func main() {
 		w := GetWordName()
 		wordChan <- w
 	}()
-	fmt.Println(<-wordChan)
-	fmt.Println(<-userChan, <-scoreChan)
+	word := <-wordChan
+	user := <-userChan
+	score := <-scoreChan
+	message := fmt.Sprintf("今週の腕試し（かな）の1位は %dpt で %s さんです。（%s）", score, user, word)
+	pkg.Tweet(message)
 }
