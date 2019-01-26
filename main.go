@@ -9,6 +9,7 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 	"strconv"
+	"strings"
 	"sync"
 )
 
@@ -109,8 +110,10 @@ func tweetRanking(im IM) {
 	}()
 
 	word := <-wordChan
-	user := <-userChan
 	score := <-scoreChan
+	// リプライにならないようにする
+	user := strings.Replace(<-userChan, "@", "@ ", -1)
+
 	message := fmt.Sprintf("今週の腕試し（%s）の1位は %dpt で %s さんです。（%s）",
 		im, score, user, word)
 	pkg.Tweet(message)
