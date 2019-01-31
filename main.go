@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/nohtaray/ety-ranking/pkg"
 	"log"
 	"net/http"
@@ -119,7 +121,7 @@ func tweetRanking(im IM) {
 	pkg.Tweet(message)
 }
 
-func main() {
+func HandleRequest(ctx context.Context) (string, error) {
 	wg := sync.WaitGroup{}
 	ims := []IM{Roma, Kana, English}
 	for _, im := range ims {
@@ -130,4 +132,10 @@ func main() {
 		}(im)
 	}
 	wg.Wait()
+
+	return "ok", nil
+}
+
+func main() {
+	lambda.Start(HandleRequest)
 }
