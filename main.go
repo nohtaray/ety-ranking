@@ -114,7 +114,7 @@ func tweetRanking(im IM) {
 	word := <-wordChan
 	score := <-scoreChan
 	// リプライにならないようにする
-	user := strings.Replace(<-userChan, "@", "@ ", -1)
+	user := strings.NewReplacer("@", "@ ", "＠", "@ ").Replace(<-userChan)
 
 	message := fmt.Sprintf("今週の腕試し（%s）の1位は %dpt で %s さんです。（%s）",
 		im, score, user, word)
